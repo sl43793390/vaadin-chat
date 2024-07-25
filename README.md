@@ -1,6 +1,12 @@
 # vaadin chat
 
-该项目使用JDK11+
+该项目使用JDK11+，测试建议JDK17
+
+## 使用说明
+本项目是一个个人开发的简单聊天系统，支持单聊、群聊，发送文件、图片
+后端使用mysql数据库
+文件使用minio存储
+
 ## Running the application
 
 The project is a standard Maven project. To run it from the command line,
@@ -29,10 +35,6 @@ Once the JAR file is built, you can run it using
 - `views` folder in `frontend/` contains the client-side JavaScript views of your application.
 - `themes` folder in `frontend/` contains the custom CSS styles.
 
-## 使用说明
-本项目是一个个人开发的简单聊天系统，支持单聊、群聊，发送文件、图片
-后端使用mysql数据库
-文件使用minio存储  
 
 <img width="200px" height="300px" alt="login" src="images/login.png"/>
 
@@ -42,11 +44,8 @@ Once the JAR file is built, you can run it using
 
 <img width="800px" height="300px" alt="login" src="images/qun.png"/>
 
-### 使用Redis说明
+### 使用MINIO说明
+搭建好MINIO服务器后将API地址配置到application.properties中
 
- - 将pom.xml 中的依赖放开
- - 将application.properties中的redis配置放开
- - 将conf包下的redisConfig放开
- - 在需要使用的类中注入RedisUtil即可使用
 
 
