@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.mapper.GroupInfoMapper">
+  <resultMap id="BaseResultMap" type="com.example.entity.GroupInfo">
+    <id column="GROUP_ID" jdbcType="VARCHAR" property="groupId" />
+    <result column="GROUP_NAME" jdbcType="VARCHAR" property="groupName" />
+    <result column="GROUP_OWNER" jdbcType="VARCHAR" property="groupOwner" />
+    <result column="GROUP_IMG" jdbcType="VARCHAR" property="groupImg" />
+    <result column="GROUP_ANNOUNCEMENT" jdbcType="VARCHAR" property="groupAnnouncement" />
+    <result column="GROUP_STATUS" jdbcType="VARCHAR" property="groupStatus" />
+    <result column="DT_CREATE" jdbcType="TIMESTAMP" property="dtCreate" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    GROUP_ID, GROUP_NAME, GROUP_OWNER, GROUP_IMG, GROUP_ANNOUNCEMENT, GROUP_STATUS, DT_CREATE
+  </sql>
+  <select id="selectByExample" parameterType="com.example.entity.GroupInfoExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    'false' as QUERYID,
+    <include refid="Base_Column_List" />
+    from group_info
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from group_info
+    where GROUP_ID = #{groupId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from group_info
+    where GROUP_ID = #{groupId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.example.entity.GroupInfo">
+    insert into group_info (GROUP_ID, GROUP_NAME, GROUP_OWNER, 
+      GROUP_IMG, GROUP_ANNOUNCEMENT, GROUP_STATUS, 
+      DT_CREATE)
+    values (#{groupId,jdbcType=VARCHAR}, #{groupName,jdbcType=VARCHAR}, #{groupOwner,jdbcType=VARCHAR}, 
+      #{groupImg,jdbcType=VARCHAR}, #{groupAnnouncement,jdbcType=VARCHAR}, #{groupStatus,jdbcType=VARCHAR}, 
+      #{dtCreate,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.example.entity.GroupInfo">
+    insert into group_info
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="groupId != null">
+        GROUP_ID,
+      </if>
+      <if test="groupName != null">
+        GROUP_NAME,
+      </if>
+      <if test="groupOwner != null">
+        GROUP_OWNER,
+      </if>
+      <if test="groupImg != null">
+        GROUP_IMG,
+      </if>
+      <if test="groupAnnouncement != null">
+        GROUP_ANNOUNCEMENT,
+      </if>
+      <if test="groupStatus != null">
+        GROUP_STATUS,
+      </if>
+      <if test="dtCreate != null">
+        DT_CREATE,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="groupId != null">
+        #{groupId,jdbcType=VARCHAR},
+      </if>
+      <if test="groupName != null">
+        #{groupName,jdbcType=VARCHAR},
+      </if>
+      <if test="groupOwner != null">
+        #{groupOwner,jdbcType=VARCHAR},
+      </if>
+      <if test="groupImg != null">
+        #{groupImg,jdbcType=VARCHAR},
+      </if>
+      <if test="groupAnnouncement != null">
+        #{groupAnnouncement,jdbcType=VARCHAR},
+      </if>
+      <if test="groupStatus != null">
+        #{groupStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="dtCreate != null">
+        #{dtCreate,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByExampleSelective" parameterType="map">
+    update group_info
+    <set>
+      <if test="record.groupId != null">
+        GROUP_ID = #{record.groupId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.groupName != null">
+        GROUP_NAME = #{record.groupName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.groupOwner != null">
+        GROUP_OWNER = #{record.groupOwner,jdbcType=VARCHAR},
+      </if>
+      <if test="record.groupImg != null">
+        GROUP_IMG = #{record.groupImg,jdbcType=VARCHAR},
+      </if>
+      <if test="record.groupAnnouncement != null">
+        GROUP_ANNOUNCEMENT = #{record.groupAnnouncement,jdbcType=VARCHAR},
+      </if>
+      <if test="record.groupStatus != null">
+        GROUP_STATUS = #{record.groupStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="record.dtCreate != null">
+        DT_CREATE = #{record.dtCreate,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update group_info
+    set GROUP_ID = #{record.groupId,jdbcType=VARCHAR},
+      GROUP_NAME = #{record.groupName,jdbcType=VARCHAR},
+      GROUP_OWNER = #{record.groupOwner,jdbcType=VARCHAR},
+      GROUP_IMG = #{record.groupImg,jdbcType=VARCHAR},
+      GROUP_ANNOUNCEMENT = #{record.groupAnnouncement,jdbcType=VARCHAR},
+      GROUP_STATUS = #{record.groupStatus,jdbcType=VARCHAR},
+      DT_CREATE = #{record.dtCreate,jdbcType=TIMESTAMP}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.example.entity.GroupInfo">
+    update group_info
+    <set>
+      <if test="groupName != null">
+        GROUP_NAME = #{groupName,jdbcType=VARCHAR},
+      </if>
+      <if test="groupOwner != null">
+        GROUP_OWNER = #{groupOwner,jdbcType=VARCHAR},
+      </if>
+      <if test="groupImg != null">
+        GROUP_IMG = #{groupImg,jdbcType=VARCHAR},
+      </if>
+      <if test="groupAnnouncement != null">
+        GROUP_ANNOUNCEMENT = #{groupAnnouncement,jdbcType=VARCHAR},
+      </if>
+      <if test="groupStatus != null">
+        GROUP_STATUS = #{groupStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="dtCreate != null">
+        DT_CREATE = #{dtCreate,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where GROUP_ID = #{groupId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.example.entity.GroupInfo">
+    update group_info
+    set GROUP_NAME = #{groupName,jdbcType=VARCHAR},
+      GROUP_OWNER = #{groupOwner,jdbcType=VARCHAR},
+      GROUP_IMG = #{groupImg,jdbcType=VARCHAR},
+      GROUP_ANNOUNCEMENT = #{groupAnnouncement,jdbcType=VARCHAR},
+      GROUP_STATUS = #{groupStatus,jdbcType=VARCHAR},
+      DT_CREATE = #{dtCreate,jdbcType=TIMESTAMP}
+    where GROUP_ID = #{groupId,jdbcType=VARCHAR}
+  </update>
+</mapper>

@@ -1,0 +1,282 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.mapper.GroupMessageMapper">
+  <resultMap id="BaseResultMap" type="com.example.entity.GroupMessage">
+    <id column="GROUP_ID" jdbcType="VARCHAR" property="groupId" />
+    <id column="MESSAGE_ID" jdbcType="BIGINT" property="messageId" />
+    <result column="USER_ID" jdbcType="VARCHAR" property="userId" />
+    <result column="MESSAGE" jdbcType="VARCHAR" property="message" />
+    <result column="IMG_URL" jdbcType="VARCHAR" property="imgUrl" />
+    <result column="FILE_URL" jdbcType="VARCHAR" property="fileUrl" />
+    <result column="FILE_NAME" jdbcType="VARCHAR" property="fileName" />
+    <result column="DT_SEND" jdbcType="TIMESTAMP" property="dtSend" />
+    <result column="FLAG_DELETE" jdbcType="CHAR" property="flagDelete" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    GROUP_ID, MESSAGE_ID, USER_ID, MESSAGE, IMG_URL, FILE_URL, FILE_NAME, DT_SEND, FLAG_DELETE
+  </sql>
+  <select id="selectByExample" parameterType="com.example.entity.GroupMessageExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    'false' as QUERYID,
+    <include refid="Base_Column_List" />
+    from group_message
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+   <select id="getMaxMessageIdByGroupId" parameterType="map" resultType="java.lang.Long">
+    select max(MESSAGE_ID) from group_message
+    where GROUP_ID = #{groupId,jdbcType=VARCHAR}
+  </select>
+   <select id="getMaxMessageIdByUserId" parameterType="map" resultType="java.lang.Long">
+    SELECT max(gm.MESSAGE_ID) FROM group_message gm where gm.group_id in
+	(
+	select group_id from group_user_map where user_id = #{userId,jdbcType=VARCHAR}
+	)
+  </select>
+  
+  <select id="selectMessageOverCurrent" parameterType="map" resultMap="BaseResultMap">
+  SELECT * FROM group_message gm where gm.MESSAGE_ID > #{groupId,jdbcType=VARCHAR} and  gm.group_id in
+	(
+	select group_id from group_user_map where user_id = #{userId,jdbcType=VARCHAR}
+	)
+	ORDER BY DT_SEND ASC
+  </select>
+  <select id="selectByPrimaryKey" parameterType="map" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from group_message
+    where GROUP_ID = #{groupId,jdbcType=VARCHAR}
+      and MESSAGE_ID = #{messageId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="map">
+    delete from group_message
+    where GROUP_ID = #{groupId,jdbcType=VARCHAR}
+      and MESSAGE_ID = #{messageId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.example.entity.GroupMessage">
+    insert into group_message (GROUP_ID, MESSAGE_ID, USER_ID, 
+      MESSAGE, IMG_URL, FILE_URL, 
+      FILE_NAME, DT_SEND, FLAG_DELETE
+      )
+    values (#{groupId,jdbcType=VARCHAR}, #{messageId,jdbcType=BIGINT}, #{userId,jdbcType=VARCHAR}, 
+      #{message,jdbcType=VARCHAR}, #{imgUrl,jdbcType=VARCHAR}, #{fileUrl,jdbcType=VARCHAR}, 
+      #{fileName,jdbcType=VARCHAR}, #{dtSend,jdbcType=TIMESTAMP}, #{flagDelete,jdbcType=CHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.example.entity.GroupMessage">
+    insert into group_message
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="groupId != null">
+        GROUP_ID,
+      </if>
+      <if test="messageId != null">
+        MESSAGE_ID,
+      </if>
+      <if test="userId != null">
+        USER_ID,
+      </if>
+      <if test="message != null">
+        MESSAGE,
+      </if>
+      <if test="imgUrl != null">
+        IMG_URL,
+      </if>
+      <if test="fileUrl != null">
+        FILE_URL,
+      </if>
+      <if test="fileName != null">
+        FILE_NAME,
+      </if>
+      <if test="dtSend != null">
+        DT_SEND,
+      </if>
+      <if test="flagDelete != null">
+        FLAG_DELETE,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="groupId != null">
+        #{groupId,jdbcType=VARCHAR},
+      </if>
+      <if test="messageId != null">
+        #{messageId,jdbcType=BIGINT},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="message != null">
+        #{message,jdbcType=VARCHAR},
+      </if>
+      <if test="imgUrl != null">
+        #{imgUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="fileUrl != null">
+        #{fileUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="fileName != null">
+        #{fileName,jdbcType=VARCHAR},
+      </if>
+      <if test="dtSend != null">
+        #{dtSend,jdbcType=TIMESTAMP},
+      </if>
+      <if test="flagDelete != null">
+        #{flagDelete,jdbcType=CHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByExampleSelective" parameterType="map">
+    update group_message
+    <set>
+      <if test="record.groupId != null">
+        GROUP_ID = #{record.groupId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.messageId != null">
+        MESSAGE_ID = #{record.messageId,jdbcType=BIGINT},
+      </if>
+      <if test="record.userId != null">
+        USER_ID = #{record.userId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.message != null">
+        MESSAGE = #{record.message,jdbcType=VARCHAR},
+      </if>
+      <if test="record.imgUrl != null">
+        IMG_URL = #{record.imgUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="record.fileUrl != null">
+        FILE_URL = #{record.fileUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="record.fileName != null">
+        FILE_NAME = #{record.fileName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.dtSend != null">
+        DT_SEND = #{record.dtSend,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.flagDelete != null">
+        FLAG_DELETE = #{record.flagDelete,jdbcType=CHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update group_message
+    set GROUP_ID = #{record.groupId,jdbcType=VARCHAR},
+      MESSAGE_ID = #{record.messageId,jdbcType=BIGINT},
+      USER_ID = #{record.userId,jdbcType=VARCHAR},
+      MESSAGE = #{record.message,jdbcType=VARCHAR},
+      IMG_URL = #{record.imgUrl,jdbcType=VARCHAR},
+      FILE_URL = #{record.fileUrl,jdbcType=VARCHAR},
+      FILE_NAME = #{record.fileName,jdbcType=VARCHAR},
+      DT_SEND = #{record.dtSend,jdbcType=TIMESTAMP},
+      FLAG_DELETE = #{record.flagDelete,jdbcType=CHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.example.entity.GroupMessage">
+    update group_message
+    <set>
+      <if test="userId != null">
+        USER_ID = #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="message != null">
+        MESSAGE = #{message,jdbcType=VARCHAR},
+      </if>
+      <if test="imgUrl != null">
+        IMG_URL = #{imgUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="fileUrl != null">
+        FILE_URL = #{fileUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="fileName != null">
+        FILE_NAME = #{fileName,jdbcType=VARCHAR},
+      </if>
+      <if test="dtSend != null">
+        DT_SEND = #{dtSend,jdbcType=TIMESTAMP},
+      </if>
+      <if test="flagDelete != null">
+        FLAG_DELETE = #{flagDelete,jdbcType=CHAR},
+      </if>
+    </set>
+    where GROUP_ID = #{groupId,jdbcType=VARCHAR}
+      and MESSAGE_ID = #{messageId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.example.entity.GroupMessage">
+    update group_message
+    set USER_ID = #{userId,jdbcType=VARCHAR},
+      MESSAGE = #{message,jdbcType=VARCHAR},
+      IMG_URL = #{imgUrl,jdbcType=VARCHAR},
+      FILE_URL = #{fileUrl,jdbcType=VARCHAR},
+      FILE_NAME = #{fileName,jdbcType=VARCHAR},
+      DT_SEND = #{dtSend,jdbcType=TIMESTAMP},
+      FLAG_DELETE = #{flagDelete,jdbcType=CHAR}
+    where GROUP_ID = #{groupId,jdbcType=VARCHAR}
+      and MESSAGE_ID = #{messageId,jdbcType=BIGINT}
+  </update>
+</mapper>
