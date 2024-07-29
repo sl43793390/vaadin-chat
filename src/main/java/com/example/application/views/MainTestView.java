@@ -65,7 +65,6 @@ public class MainTestView extends VerticalLayout implements MultiFileReceiver,Co
     private static final long serialVersionUID = 817463156628734901L;
     private UserFriendProcess userFriendProcess;
     private UserMessageProcess userMessageProcess;
-//    private MinioTemplate minioTemplate;
 	private HorizontalLayout chatLayout;
 	private VerticalLayout messageLayout;
 	private VerticalLayout inputLayout;
@@ -92,7 +91,6 @@ public class MainTestView extends VerticalLayout implements MultiFileReceiver,Co
     public MainTestView(@Autowired UserFriendProcess userFriendProcess, @Autowired UserMessageProcess userMessageProcess) {
     	this.userFriendProcess = userFriendProcess;
     	this.userMessageProcess = userMessageProcess;
-//    	this.minioTemplate = minioTemplate;
     	if (null == ComponentUtil.getCurrentUser()) {
     		return;
     	}

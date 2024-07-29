@@ -9,7 +9,6 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.server.VaadinSession;
 
 public class Header extends VerticalLayout {
-
 	private static final long serialVersionUID = -6106463380631469363L;
 
 	public Header() {
