@@ -122,7 +122,6 @@ public class MainTestView extends VerticalLayout implements MultiFileReceiver,Co
     	userListLayout.addClassName("main-chat-listlayout");
     	
     	List<UserFriend> userFriendById = userFriendProcess.getUserFriendById(ComponentUtil.getCurrentUser().getUserId());
-    	//添加用户好友列表
     	for (UserFriend userFriend : userFriendById) {
     		Button btn = ComFactory.getTertriayBtn(userFriendProcess.getUserById(userFriend.getFriendId()).getUserName());
     		btn.addClassName("main-left-user-btn");
@@ -178,12 +177,10 @@ public class MainTestView extends VerticalLayout implements MultiFileReceiver,Co
     			});
         		userListLayout.add(btn);
 			}
-			
 		}
     	if (CollectionUtil.isNotEmpty(userFriendById)) {
     		currentSelectedUserId = userFriendById.get(0).getFriendId();
 		}
-    	
     }
 
     /**
@@ -295,7 +292,6 @@ public class MainTestView extends VerticalLayout implements MultiFileReceiver,Co
     	    	});
 			}
 		}
-    	
     	return emoLayout;
     }
     /**
